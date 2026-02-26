@@ -17,7 +17,7 @@ You can run the server directly:
 ```bash
 python3 server.py
 ```
-This will start an SSE server running on `http://127.0.0.1:8000`.
+This will start an SSE server running on `http://0.0.0.0:8000`, making it accessible to external clients and Docker containers (like n8n).
 
 ### Inspecting with the MCP Inspector
 To test the server interactively, use the MCP CLI inspector provided by Model Context Protocol:

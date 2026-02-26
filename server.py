@@ -12,8 +12,8 @@ from mcp.server.fastmcp import FastMCP
 WORKSPACE_DIR = pathlib.Path(__file__).parent / "workspace"
 WORKSPACE_DIR.mkdir(exist_ok=True)
 
-# Initialize FastMCP Server
-mcp = FastMCP("python-executor")
+# Initialize FastMCP Server bound to 0.0.0.0 so external clients (like n8n) can connect
+mcp = FastMCP("python-executor", host="0.0.0.0", port=8000)
 
 @mcp.tool()
 def execute_python_code(code: str) -> str:
@@ -45,7 +45,7 @@ def execute_python_code(code: str) -> str:
         if result.stderr:
             output += f"\n--- STDERR ---\n{result.stderr}"
             
-        output += f"\n\n[System] Any generated files are available via HTTP at http://127.0.0.1:8000/workspace/..."
+        output += f"\n\n[System] Any generated files are available via HTTP at http://<server_ip>:8000/workspace/..."
         return output
     except subprocess.TimeoutExpired:
         return "Error: Code execution timed out after 10 seconds."
@@ -65,9 +65,9 @@ if __name__ == "__main__":
         Mount("/workspace", app=StaticFiles(directory=str(WORKSPACE_DIR)), name="workspace")
     )
     
-    print("Starting MCP Server with static file serving on http://127.0.0.1:8000")
-    print("SSE endpoint: http://127.0.0.1:8000/sse")
-    print("Static files: http://127.0.0.1:8000/workspace/")
+    print("Starting MCP Server with static file serving on http://0.0.0.0:8000")
+    print("SSE endpoint: http://0.0.0.0:8000/sse")
+    print("Static files: http://0.0.0.0:8000/workspace/")
     
-    # Run the server using uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    # Run the server using uvicorn correctly configured for 0.0.0.0
+    uvicorn.run(app, host="0.0.0.0", port=8000)
