@@ -48,4 +48,5 @@ def execute_python_code(code: str) -> str:
             temp_file_path.unlink()
 
 if __name__ == "__main__":
-    mcp.run(transport='stdio')
+    # Run the server using SSE transport (defaults to localhost:8000 usually, can be configured)
+    mcp.run(transport='sse')
