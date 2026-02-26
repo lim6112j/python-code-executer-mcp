@@ -58,7 +58,7 @@ def execute_python_code(code: str) -> str:
 
 if __name__ == "__main__":
     # Get the underlying Starlette app from FastMCP
-    app = mcp.sse_app("/sse")
+    app = mcp.sse_app()
     
     # Mount the workspace directory to be served statically
     app.routes.append(
