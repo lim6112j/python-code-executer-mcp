@@ -13,7 +13,7 @@ WORKSPACE_DIR = pathlib.Path(__file__).parent / "workspace"
 WORKSPACE_DIR.mkdir(exist_ok=True)
 
 # Initialize FastMCP Server bound to 0.0.0.0 so external clients (like n8n) can connect
-mcp = FastMCP("python-executor", host="0.0.0.0", port=8000)
+mcp = FastMCP("python-executor", host="0.0.0.0", port=18000)
 
 @mcp.tool()
 def execute_python_code(code: str) -> str:
@@ -58,7 +58,7 @@ def execute_python_code(code: str) -> str:
         if changed_files:
             output += "\n\n[System] Generated/Modified files available at:\n"
             for f in changed_files:
-                output += f"- http://localhost:8000/workspace/{f.name}\n"
+                output += f"- http://localhost:18000/workspace/{f.name}\n"
         else:
             output += "\n\n[System] No files were generated or modified."
             
@@ -81,9 +81,9 @@ if __name__ == "__main__":
         Mount("/workspace", app=StaticFiles(directory=str(WORKSPACE_DIR)), name="workspace")
     )
     
-    print("Starting MCP Server with static file serving on http://0.0.0.0:8000")
-    print("SSE endpoint: http://0.0.0.0:8000/sse")
-    print("Static files: http://0.0.0.0:8000/workspace/")
+    print("Starting MCP Server with static file serving on http://0.0.0.0:18000")
+    print("SSE endpoint: http://0.0.0.0:18000/sse")
+    print("Static files: http://0.0.0.0:18000/workspace/")
     
     # Run the server using uvicorn correctly configured for 0.0.0.0
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=18000)
